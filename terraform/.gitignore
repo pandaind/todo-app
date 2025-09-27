@@ -1,0 +1,27 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfplan
+*.tfstate
+.terraformrc
+terraform.rc
+
+# Environment specific
+.env
+*.tfvars
+!terraform.tfvars.example
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log

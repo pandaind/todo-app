@@ -1,0 +1,40 @@
+fastapi>=0.115.1
+uvicorn[standard]==0.32.0
+pydantic>=2.11.7
+gunicorn>=21.2.0
+
+# Database Dependencies
+sqlalchemy==2.0.23
+alembic==1.12.1
+psycopg2-binary>=2.9.0  # PostgreSQL adapter
+
+# Authentication Dependencies
+PyJWT>=2.8.0
+bcrypt>=4.0.1
+python-multipart>=0.0.6
+
+# AI Dependencies
+openai>=1.0.0
+
+# MCP Server Dependencies
+fastmcp>=2.11.0
+mcp
+#litellm
+#backoff
+#rq
+#mcp-cli-host
+
+# Additional utilities
+python-dateutil==2.9.0
+typing-extensions==4.12.2
+
+# Development and testing
+pytest==8.3.2
+pytest-asyncio==0.24.0
+black==24.8.0
+isort==5.13.2
+pre-commit
+
+# Optional: for enhanced features
+python-multipart>=0.0.18  # For file uploads (compatible with gradio)
+aiofiles==24.1.0  # For async file operations

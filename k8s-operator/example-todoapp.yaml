@@ -1,0 +1,12 @@
+apiVersion: todoapp.github.com/v1alpha1
+kind: TodoApp
+metadata:
+  name: my-todo-app
+  namespace: default
+spec:
+  backend:
+    image: todo-backend:latest
+    replicas: 2
+  frontend:
+    image: todo-frontend:latest
+    replicas: 2

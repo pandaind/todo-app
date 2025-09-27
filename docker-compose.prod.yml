@@ -1,0 +1,61 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - ALB_DNS_NAME=localhost:8080
+      - FRONTEND_URL=http://localhost:8080
+  
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    depends_on:
+      - backend
+
+  # Production-like setup for testing
+  backend-prod:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "5001:5000"
+    environment:
+      - ENVIRONMENT=production
+      - ALB_DNS_NAME=localhost:8080
+      - FRONTEND_URL=http://localhost:8080
+    profiles:
+      - prod
+      - alb
+
+  frontend-prod:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8081:80"  # Changed port to avoid conflict with nginx-alb
+    environment:
+      - BACKEND_URL=http://localhost:5001
+    depends_on:
+      - backend-prod
+    profiles:
+      - prod
+      - alb
+
+  # Nginx reverse proxy to simulate ALB routing
+  nginx-alb:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx-alb.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - backend-prod
+      - frontend-prod
+    profiles:
+      - alb

@@ -1,0 +1,38 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: todoapps.todoapp.github.com
+spec:
+  group: todoapp.github.com
+  versions:
+    - name: v1alpha1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              properties:
+                backend:
+                  type: object
+                  properties:
+                    image:
+                      type: string
+                    replicas:
+                      type: integer
+                frontend:
+                  type: object
+                  properties:
+                    image:
+                      type: string
+                    replicas:
+                      type: integer
+  scope: Namespaced
+  names:
+    plural: todoapps
+    singular: todoapp
+    kind: TodoApp
+    shortNames:
+    - tdapp

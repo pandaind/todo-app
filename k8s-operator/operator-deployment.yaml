@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-operator
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: todo-operator
+  template:
+    metadata:
+      labels:
+        app: todo-operator
+    spec:
+      serviceAccountName: todo-operator
+      containers:
+      - name: operator
+        image: todo-operator:latest
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "250m"
