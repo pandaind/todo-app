@@ -101,6 +101,11 @@ variable "backend_target_group_arn" {
   type        = string
 }
 
+variable "alb_dns_name" {
+  description = "ALB DNS name for backend communication"
+  type        = string
+}
+
 variable "db_credentials_secret_arn" {
   description = "Database credentials secret ARN"
   type        = string
@@ -113,10 +118,5 @@ variable "db_endpoint" {
 
 variable "database_name" {
   description = "Database name"
-  type        = string
-}
-
-variable "alb_dns_name" {
-  description = "ALB DNS name"
   type        = string
 }

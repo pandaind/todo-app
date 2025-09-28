@@ -1,8 +1,55 @@
 # Todo App - AWS ECS Deployment with Terraform
 
-This repository contains Terraform configurations to deploy a containerized Todo application to AWS ECS across multiple environments (dev, uat, prod) with **environment-based configuration** (no hardcoded values).
+This repository contain## Project Structure
 
-## 🚀 Quick Start
+```text
+terraform/
+├── modules/
+│   ├── networking/     # VPC, subnets, routing
+│   ├── alb/           # Application Load Balancer
+│   ├── ecs/           # ECS cluster and services (with service discovery)
+│   └── rds/           # PostgreSQL database
+├── environments/
+│   ├── dev/           # Development environment
+│   ├── uat/           # UAT environment
+│   └── prod/          # Production environment
+├── .env.template      # Configuration template  
+├── configure-env.sh   # Environment setup script
+├── deploy.sh          # Unified deployment script (all-in-one)
+├── build-and-push.sh  # Docker build and push script
+└── main.tf            # Main module composition
+```
+
+## Environment Configurationations to deploy a containerized Todo application to AWS ECS across multiple environments (dev, uat, prod) with **environment-based configuration** (no hardcoded values).
+
+## Quick Start
+
+### 🚀 **Automated Deployment (Zero Manual Imports!)**
+
+This project now features a **fully automated deployment system** that eliminates the need for manual `terraform import` commands. The system automatically handles existing resources, conflicts, and provides comprehensive validation.
+
+```bash
+# 1. Configure environment (one-time setup)
+./configure-env.sh
+
+# 2. Deploy with zero manual intervention
+./deploy.sh dev apply
+
+# That's it! No manual imports needed ✨
+```
+
+**✅ What's Automated:**
+- ECR repository imports
+- Secrets Manager conflict resolution  
+- Pre-deployment validation
+- Post-deployment health checks
+- Error recovery and retry logic
+- AWS Service Discovery for container networking
+- ECS task definition updates with service discovery
+
+---
+
+### 📋 **Traditional Step-by-Step Process**
 
 ### 1. Configure Environment (One-time setup)
 ```bash
@@ -49,18 +96,18 @@ terraform/
 ├── modules/
 │   ├── networking/     # VPC, subnets, routing
 │   ├── alb/           # Application Load Balancer
-│   ├── ecs/           # ECS cluster and services
+│   ├── ecs/           # ECS cluster and services (with service discovery)
 │   └── rds/           # PostgreSQL database
 ├── environments/
 │   ├── dev/           # Development environment
 │   ├── uat/           # UAT environment
 │   └── prod/          # Production environment
-├── .env.template      # Configuration template
+├── .env.template      # Configuration template  
 ├── configure-env.sh   # Environment setup script
-├── generate-tfvars.sh # Dynamic Terraform variables
-├── deploy.sh          # Deployment script
-├── build-and-push.sh  # Docker build script
-├── setup-guide.sh     # Quick start guide
+├── deploy.sh          # Unified deployment script (all-in-one)
+├── build-and-push.sh  # Docker build and push script
+└── main.tf            # Main module composition
+```
 └── main.tf            # Main module composition
 ```
 
@@ -121,14 +168,32 @@ The configuration is controlled by these key variables in `.env`:
 # Plan deployment  
 ./deploy.sh <env> plan
 
-# Apply changes
+# Apply changes (includes automatic service recovery)
 ./deploy.sh <env> apply
+
+# Recover failed ECS services
+./deploy.sh <env> recover
 
 # Destroy infrastructure
 ./deploy.sh <env> destroy
 ```
 
 Where `<env>` is: `dev`, `uat`, or `prod`
+
+### Automatic Service Recovery
+
+The deployment script now includes automatic ECS service recovery:
+
+- **During Apply**: Automatically detects and recovers failed ECS services
+- **Manual Recovery**: Use `./deploy.sh <env> recover` to manually fix service issues
+- **Health Checks**: Validates all services after deployment
+- **Image Pull Issues**: Automatically restarts services that fail due to ECR image problems
+
+If you see "0/1 tasks running" warnings, the script will automatically:
+1. Force new deployment on affected services
+2. Wait for services to stabilize
+3. Re-validate service health
+4. Report final status
 
 ### Build and Push Images
 

@@ -6,6 +6,7 @@ terraform {
   }
 }
 
+# Import blocks for existing resources (Terraform 1.5+)
 module "todo_app" {
   source = "../../"
 

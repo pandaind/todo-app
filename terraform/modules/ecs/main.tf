@@ -12,6 +12,37 @@ resource "aws_ecs_cluster" "main" {
   }
 }
 
+# Service Discovery Namespace
+resource "aws_service_discovery_private_dns_namespace" "main" {
+  name        = "${var.project_name}-${var.environment}.local"
+  description = "Service discovery namespace for ${var.project_name}-${var.environment}"
+  vpc         = var.vpc_id
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-service-discovery"
+  }
+}
+
+# Service Discovery Service for Backend
+resource "aws_service_discovery_service" "backend" {
+  name = "backend"
+
+  dns_config {
+    namespace_id = aws_service_discovery_private_dns_namespace.main.id
+    
+    dns_records {
+      ttl  = 10
+      type = "A"
+    }
+    
+    routing_policy = "MULTIVALUE"
+  }
+
+  tags = {
+    Name = "${var.project_name}-${var.environment}-backend-discovery"
+  }
+}
+
 # ECS Cluster Capacity Providers
 resource "aws_ecs_cluster_capacity_providers" "main" {
   cluster_name = aws_ecs_cluster.main.name
@@ -165,7 +196,26 @@ resource "aws_ecs_task_definition" "frontend" {
         {
           name  = "REACT_APP_API_URL"
           value = "/api"
+        },
+        {
+          name  = "BACKEND_HOST"
+          value = "backend.${var.project_name}-${var.environment}.local"
+        },
+        {
+          name  = "BACKEND_PORT"
+          value = "5000"
+        },
+        {
+          name  = "BACKEND_PROTOCOL"
+          value = "http"
         }
+      ]
+
+      # Override the default command to use a script that updates nginx config
+      command = [
+        "/bin/sh",
+        "-c",
+        "echo 'Updating nginx config...' && sed -i \"s|proxy_pass http://backend:5000;|proxy_pass http://$${BACKEND_HOST}:$${BACKEND_PORT};|g\" /etc/nginx/conf.d/default.conf && echo 'Updated nginx config:' && cat /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
       ]
     }
   ])
@@ -302,6 +352,11 @@ resource "aws_ecs_service" "backend" {
     target_group_arn = var.backend_target_group_arn
     container_name   = "backend"
     container_port   = var.backend_port
+  }
+
+  # Enable service discovery
+  service_registries {
+    registry_arn = aws_service_discovery_service.backend.arn
   }
 
   depends_on = [aws_iam_role_policy_attachment.ecs_task_execution_role_policy]

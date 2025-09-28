@@ -67,8 +67,10 @@ resource "aws_db_instance" "main" {
 
 # Store database credentials in AWS Secrets Manager
 resource "aws_secretsmanager_secret" "db_credentials" {
-  name        = "${var.project_name}-${var.environment}-db-credentials"
-  description = "Database credentials for ${var.project_name} ${var.environment}"
+  name                     = "${var.project_name}-${var.environment}-db-credentials"
+  description              = "Database credentials for ${var.project_name} ${var.environment}"
+  recovery_window_in_days  = var.environment == "prod" ? 30 : 0
+  force_overwrite_replica_secret = true
 
   tags = {
     Name = "${var.project_name}-${var.environment}-db-credentials"

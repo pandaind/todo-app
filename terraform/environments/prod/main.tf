@@ -11,6 +11,24 @@ terraform {
   }
 }
 
+# Import blocks for existing resources (Terraform 1.5+)
+# These will automatically import resources if they exist but aren't in state
+
+import {
+  to = module.todo_app.aws_ecr_repository.frontend
+  id = "todo-app-frontend"
+}
+
+import {
+  to = module.todo_app.aws_ecr_repository.backend  
+  id = "todo-app-backend"
+}
+
+import {
+  to = module.todo_app.module.rds.aws_secretsmanager_secret.db_credentials
+  id = "todo-app-prod-db-credentials"
+}
+
 module "todo_app" {
   source = "../../"
 
