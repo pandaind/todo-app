@@ -1,6 +1,6 @@
 # Todo App
 
-A modern full-stack todo application built with React frontend and Python FastAPI backend. Features JWT authentication, real-time updates, and cloud deployment capabilities.
+A modern full-stack application and cloud deployment capabilities.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)](https://python.org)
