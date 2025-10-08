@@ -8,7 +8,7 @@ A modern full-stack application and cloud deployment capabilities.
 [![FastAPI](https://img.shields.io/badge/FastAPI-latest-009688.svg)](https://fastapi.tiangolo.com)
 
 
-## 🚀 Features
+## Features
 
 - **Frontend**: React + TypeScript + Vite + Tailwind CSS
 - **Backend**: Python FastAPI + SQLAlchemy
@@ -32,13 +32,13 @@ todo-app/
 └── README.md             # This file
 ```
 
-## 🛠️ Prerequisites
+## Prerequisites
 
 - **Docker Desktop**
 - **Node.js** (v18+)
 - **Python** (3.10+)
 
-## 🏃‍♂️ Quick Start
+## Quick Start
 
 ### Using Docker (Recommended)
 
@@ -85,7 +85,7 @@ npm install
 npm run dev
 ```
 
-## ☁️ AWS Deployment
+## AWS Deployment
 
 For AWS deployment using Terraform:
 
@@ -108,7 +108,7 @@ For AWS deployment using Terraform:
    ./deploy.sh dev destroy
    ```
 
-## 🔗 API Endpoints
+## API Endpoints
 
 - `POST /api/auth/signup` - Create new user account
 - `POST /api/auth/login` - User login
@@ -118,7 +118,7 @@ For AWS deployment using Terraform:
 - `PUT /api/todos/{id}` - Update todo
 - `DELETE /api/todos/{id}` - Delete todo
 
-## 📋 Environment Variables
+## Environment Variables
 
 ### Backend
 
@@ -129,30 +129,14 @@ For AWS deployment using Terraform:
 
 - `VITE_API_URL` - Backend API URL
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Make your changes
-4. Commit your changes (`git commit -m 'Add some amazing feature'`)
-5. Push to the branch (`git push origin feature/amazing-feature`)
-6. Open a Pull Request
-
-## 🐛 Issues
+## Issues
 
 Found a bug or have a feature request? Please open an issue on GitHub.
 
-## ⭐ Support
+## Support
 
 If you found this project helpful, please give it a ⭐ on GitHub!
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- [FastAPI](https://fastapi.tiangolo.com) - Modern, fast web framework
-- [React](https://reactjs.org) - A JavaScript library for building user interfaces
-- [Tailwind CSS](https://tailwindcss.com) - A utility-first CSS framework
-- [PostgreSQL](https://postgresql.org) - Advanced open source database
